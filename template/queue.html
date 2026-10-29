@@ -291,7 +291,7 @@ function nextLive(f){var i;for(i=f;i<T.length;i++){if(isLive(i))return i;}
   for(i=0;i<f&&i<T.length;i++){if(isLive(i))return i;}return -1;}
 function count(fn){var n=0,i;for(i=0;i<T.length;i++){if(fn(i))n++;}return n;}
 function bandCount(b){return count(function(i){return isLive(i)&&T[i].band===b;});}
-function minsLeft(){var m=0,i;for(i=0;i<T.length;i++){if(isLive(i))m+=(T[i].minutes||0);}return m;}
+function minsLeft(){var m=0,i;for(i=0;i<T.length;i++){if(isLive(i))m+=(T[i].minutes||0);}return Math.max(1,Math.round(m));}
 function nextWake(){var t=null,i,u;for(i=0;i<T.length;i++){u=get(i).until;
   if(isSnoozed(i)&&(t===null||u<t))t=u;}return t;}
 function mins(n){return n<1?"30 sec":(n+" min");}
@@ -320,8 +320,8 @@ function render(){
     $("card").hidden=true;$("end").hidden=false;
     var w=nextWake();
     if(T.length&&count(isDone)===T.length){
-      $("endh").textContent="All done";
-      $("endp").textContent="Nothing left. Your dates are under Show everything.";
+      $("endh").textContent=(T.length===1)?"Done":("All "+T.length+" done");
+      $("endp").textContent=(T.length===1)?"That was the only one.":"Nothing left in the queue.";
     }else if(w){
       $("endh").textContent="Nothing due right now";
       $("endp").textContent="The next snoozed task comes back at "+
