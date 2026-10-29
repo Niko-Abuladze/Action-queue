@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Action Queue data",
+  "description": "The object assigned to window.QUEUE at the top of template/queue.html.",
+  "type": "object",
+  "required": ["title", "updated", "tasks"],
+  "additionalProperties": false,
+  "properties": {
+    "title":   { "type": "string", "description": "Page title. A name, two to four words." },
+    "updated": { "type": "string", "description": "Human date, e.g. '29 Oct 2026'." },
+
+    "done_for_you": {
+      "description": "What the assistant did itself before writing any task. Omit or null if nothing.",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["heading", "items"],
+          "additionalProperties": false,
+          "properties": {
+            "heading": { "type": "string" },
+            "note":    { "type": "string" },
+            "items":   { "type": "array", "items": { "$ref": "#/$defs/calrow" } }
+          }
+        }
+      ]
+    },
+
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "band", "minutes", "title", "line"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "Stable slug. State is keyed on this. NEVER renumber or reuse."
+          },
+          "band": {
+            "enum": ["now", "week"],
+            "description": "now = today or tomorrow, nothing over 3 minutes. week = dated inside 7 days."
+          },
+          "minutes": {
+            "type": "number", "minimum": 0, "maximum": 15,
+            "description": "Honest estimate. 0.5 renders as '30 sec'. Over 15 means split the task."
+          },
+          "title": { "type": "string", "description": "Imperative, verb first, one line." },
+          "line":  { "type": "string", "description": "ONE sentence. Why now, not what. Inline <b> and <mark class='flag'> allowed." },
+          "why":   { "type": "string", "description": "Two to four sentences. What breaks if this does not happen." },
+          "steps": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Physical actions only. Each one is something the hand does."
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "array", "minItems": 2, "maxItems": 2,
+              "items": { "type": "string" },
+              "description": "[label, url]"
+            }
+          },
+          "draft": {
+            "type": ["string", "null"],
+            "description": "Complete copy-ready text. Subject line first where there is one. Never a description of a draft."
+          }
+        }
+      }
+    },
+
+    "calendar": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/calrow" }
+    }
+  },
+
+  "$defs": {
+    "calrow": {
+      "type": "object",
+      "required": ["d", "m", "title"],
+      "additionalProperties": false,
+      "properties": {
+        "d":     { "type": "string", "description": "Day, e.g. 'Sun 1'." },
+        "m":     { "type": "string", "description": "Month, e.g. 'Nov'." },
+        "title": { "type": "string" },
+        "note":  { "type": "string", "description": "One line. Why it matters: a collision, a thing to bring, something unconfirmed." },
+        "url":   { "type": "string", "description": "Link to the real calendar event. Create the event first, then link it." }
+      }
+    }
+  }
+}
