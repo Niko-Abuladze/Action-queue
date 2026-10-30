@@ -45,6 +45,39 @@ Do **not** emit a queue for:
 A queue that is emitted when there is nothing to do is worse than no queue, because
 the person stops opening it. **A queue that cries wolf is dead.**
 
+### 1.1 The panel is the product
+
+The queue is an **Artifact inside the assistant's own app**, opened by clicking its card
+in the conversation. It is not a file to download, not a page to open in a browser, and
+not something the person should have to leave the app to use.
+
+Design for that surface:
+
+- **One column, always.** The panel is roughly 420 to 900 pixels wide and often the
+  narrow end of that. Nothing may scroll horizontally at 420.
+- **Republish to the same artifact.** One card in the chat, clicked any time, always
+  showing the current queue. A second artifact is a second thing to remember.
+- Assume the person is reading it beside the conversation, not instead of it.
+
+### 1.2 The title is a live summary
+
+The artifact's `<title>` is what the person sees on the card in the conversation,
+before they click. It is **not a fixed name**. It changes with every publish and it
+tells them what they are about to do.
+
+```
+Six repo files to replace
+Three emails to send, 8 min
+Nothing due until Tuesday
+One booking, closes today
+```
+
+A constant name like "Action Queue" or "Niko's Tasks" tells them nothing, so they stop
+looking at the card and the card stops being a signal. Write the title last, from the
+queue you just built: what kind of work, how much of it, and the deadline if one
+dominates.
+
+
 ---
 
 ## 2. Do it yourself first — the rule that actually matters
@@ -253,12 +286,20 @@ Above the fold — meaning the card, before "Read the steps":
 - **A task the person has already done.** Check before you list it. One stale card
   destroys trust in every other card on the page.
 
-In the accompanying chat message:
+### The reply itself
 
-- Three lines maximum.
-- Line one tells them to open the queue.
-- **Never restate the queue's contents.** That is the failure the whole spec exists
-  to prevent, and it is the easiest one to fall back into.
+**When you build a queue, send nothing else.**
+
+Not a summary. Not a preamble. Not "open the queue". The artifact card appears in the
+conversation on its own, and that card *is* the entire reply.
+
+This is absolute. Anything you feel the need to say belongs on a card, and if it does
+not deserve a card it does not deserve to be said. Prose beside a queue re-creates
+exactly the wall the queue exists to replace, and it trains the person to read the
+message instead of opening the panel.
+
+The only exception is a direct question with a one-sentence factual answer, which was
+never a queue in the first place (§1).
 
 ---
 
@@ -276,6 +317,11 @@ Every one of these was found in testing and each one made the page feel broken:
 - **A checkbox that is also a navigation target.** Separate them: the box toggles done,
   the title jumps to the card.
 - **State that resets.** See §6.
+- **Hardcoded counts in the end state.** `"All twelve done"` is correct until the day the
+  queue has one card in it. Derive every count from the task array, never from the
+  number that happened to be true when you wrote it.
+- **Fractional minutes in the counter.** A 30-second task plus a 3-minute task renders
+  as "3.5 min left" unless you round.
 
 ---
 
