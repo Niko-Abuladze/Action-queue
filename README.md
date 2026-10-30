@@ -15,7 +15,8 @@ to anyone whose problem is attention rather than information.
 ## The one rule
 
 > If a reply contains **more than one action**, **any date**, or **any draft to send**,
-> the assistant emits a queue — not a message.
+> the assistant emits a queue — not a message. And when it does, it sends **nothing
+> else**: the artifact card is the entire reply.
 
 A plain chat message is correct only for a one-sentence factual answer, a yes/no,
 or a single confirmation. Everything else is a queue.
@@ -45,6 +46,13 @@ profiles/generic.md          Profile 2 — paste into any chat, any domain.
 
 The renderer never changes. Only the data does.
 
+It renders as an **artifact panel inside the assistant's app**, not as a file you
+download. One click on the card in the conversation, and the current queue is there.
+
+The card's title is a **live summary**, rewritten on every publish — *"Six repo files
+to replace"*, *"Three emails to send, 8 min"*, *"Nothing due until Tuesday"*. A fixed
+name teaches people to stop reading the card.
+
 ## The thing most implementations get wrong
 
 Emitting a list of things the person must do, **when the assistant could have done
@@ -55,4 +63,3 @@ half of them**, is not a productivity system. It is delegation in the wrong dire
 ## Licence
 
 MIT. Take it, fork it, point it at your own life.
-
